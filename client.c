@@ -18,6 +18,7 @@ int main(int argc, char** argv)
     struct sockaddr_in udpServer, client;
     char server_message[DEFAULT_BUFLEN];
     char name[DEFAULT_BUFLEN];
+    int buff_size = sizeof(struct sockaddr_in);
 
     FILE *fptr;
 
@@ -58,12 +59,19 @@ int main(int argc, char** argv)
     }
     printf("UDP socket bind done.\n");
 
+    struct sockaddr_in broadcast_addr;
+    broadcast_addr.sin_family = AF_INET;
+    broadcast_addr.sin_port = htons(UDP_PORT);
+    broadcast_addr.sin_addr.s_addr = INADDR_BROADCAST;
+
+    sendto(udpListenSocket, name, strlen(name), 0, (struct sockaddr*) &broadcast_addr, buff_size); // Say you're alive
+
     //Accept and incoming connection
     printf("Waiting for incoming connections...\n");
     c = sizeof(struct sockaddr_in);
 
     //Receive a message from client
-    int buff_size = sizeof(struct sockaddr_in); 
+    
     while ((read_size = recvfrom(udpListenSocket , server_message , DEFAULT_BUFLEN , 0, (struct sockaddr*)&client, &buff_size)) > -1)
     {
         printf("Bytes received: %d\n", read_size);
@@ -71,7 +79,7 @@ int main(int argc, char** argv)
 
 		client.sin_port = htons(UDP_PORT);
 	
-	//When device gets "ping" message, it sends its username to the PC
+	//When device gets "ping" message, it sends its name to the PC
         if (strcmp("ping", server_message) == 0) 
         {
             if (sendto(udpListenSocket, name, strlen(name), 0, (struct sockaddr*) &client, buff_size) == -1)

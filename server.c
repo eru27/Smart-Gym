@@ -11,9 +11,8 @@
 
 const unsigned short BROADCAST_PORT = 25567;
 const unsigned short UDP_PORT = 25565;
-const unsigned short TCP_PORT = 25566;
 
-pthread_mutex_t mutex_all = PTHREAD_MUTEX_INITIALIZER; //over array, console, sens counter, terminate
+pthread_mutex_t mutex_all = PTHREAD_MUTEX_INITIALIZER; 
 pthread_cond_t cond_all = PTHREAD_COND_INITIALIZER; 
 int terminate_listen = 0;
 int devices_count = 0;
