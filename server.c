@@ -131,7 +131,7 @@ int ping_listen()
     address.sin_port = htons(UDP_PORT);
 
     int buff_size = sizeof(struct sockaddr_in); 
-    if(sendto(sock , message , strlen(message), 0, (struct sockaddr*) &address, buff_size) == -1)
+    if(sendto(sock, message, strlen(message), 0, (struct sockaddr*) &address, buff_size) == -1)
     {
         printf("Error: Could not ping listen. Listening socket might not close.\n");
 
@@ -217,7 +217,7 @@ static void *listen_devices(void *dev)
             break;
         }
 
-        // Save device data
+        /*** Save device data
         for (i = 0; i < recv; i++)
         {
             if (temp_name[i] == ',')
@@ -231,7 +231,10 @@ static void *listen_devices(void *dev)
             {
                 devices[devices_count].name[i] = temp_name[i];
             }
-        }
+        }***/
+
+        strcpy(devices[devices_count].name, temp_name);
+        devices[devices_count].status = ALIVE;
 
         devices[devices_count].adress = device_adr.sin_addr;
  
